@@ -85,4 +85,6 @@ Start a new omp session after changing the extension. Do not install and link tw
 
 The initial implementation was checked with TypeScript and ESLint, live model calls, a text-mode omp session, and an isolated Tern session at a 390 × 844 viewport. The Tern checks covered clarification choices, submission, refinement, remaining-question cancellation, and pasting into the editor.
 
+The published Git URL was installed in a fresh omp profile: `omp plugin doctor` reported four healthy checks with no warnings or errors, and `/xml` registered successfully. Model-role settings are initialized at session startup so the extension also passes install-time validation.
+
 Physical phone keyboard behavior and remote clipboard delivery were not tested.
