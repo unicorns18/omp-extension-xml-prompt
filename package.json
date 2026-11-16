@@ -1,0 +1,27 @@
+{
+	"name": "omp-extension-xml-prompt",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Ephemeral /btw-style XML prompt improver with dedicated @xml model role",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/unicorns18/omp-extension-xml-prompt.git"
+	},
+	"homepage": "https://github.com/unicorns18/omp-extension-xml-prompt#readme",
+	"type": "module",
+	"main": "./src/index.ts",
+	"omp": {
+		"extensions": [
+			"./src/index.ts"
+		]
+	},
+	"scripts": {
+		"lint": "eslint src/index.ts"
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.15.0",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.72.2"
+	}
+}
