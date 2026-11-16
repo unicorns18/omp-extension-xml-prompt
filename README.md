@@ -10,11 +10,7 @@ Requires a current [omp](https://github.com/can1357/oh-my-pi) installation. Test
 omp plugin install https://github.com/unicorns18/omp-extension-xml-prompt.git
 ```
 
-For a project-only installation, run this from that project's directory:
-
-```sh
-omp plugin install --local https://github.com/unicorns18/omp-extension-xml-prompt.git
-```
+This installs into the active omp profile. In omp 18.20.2, `--local` controls project-local plugin configuration, not the Git installation location; `--scope project` applies only to marketplace plugins.
 
 Start a new omp session after installing. The repository's `omp.extensions` manifest loads `src/index.ts` directly; no build step is needed. The package is marked `private` to prevent accidental npm publication, not to restrict Git installation.
 
