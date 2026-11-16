@@ -963,22 +963,24 @@ class XmlSidePanel implements Component, Focusable {
 export default function xmlPromptExtension(pi: ExtensionAPI): void {
 	pi.setLabel("XML Prompt Improver (/xml)");
 
-	// Register custom "xml" chat model role so `/model` -> Roles lists it as an assignable model group.
-	const modelTagsHandle = lookup("modelTags");
-	if (modelTagsHandle) {
-		const tagSchema = pi.zod.record(
-			pi.zod.string(),
-			pi.zod.object({ name: pi.zod.string().optional(), color: pi.zod.string().optional() }),
-		);
-		const parsedTags = tagSchema.safeParse(modelTagsHandle.get(pi.pi.settings));
-		const tagsMap = parsedTags.success ? parsedTags.data : {};
-		if (!(XML_ROLE_ID in tagsMap)) {
-			modelTagsHandle.override(pi.pi.settings, {
-				...tagsMap,
-				[XML_ROLE_ID]: { name: "XML Prompt", color: "accent" },
-			});
+	// Install-time validation runs the factory before settings exist; register the role once a session starts.
+	pi.on("session_start", () => {
+		const modelTagsHandle = lookup("modelTags");
+		if (modelTagsHandle) {
+			const tagSchema = pi.zod.record(
+				pi.zod.string(),
+				pi.zod.object({ name: pi.zod.string().optional(), color: pi.zod.string().optional() }),
+			);
+			const parsedTags = tagSchema.safeParse(modelTagsHandle.get(pi.pi.settings));
+			const tagsMap = parsedTags.success ? parsedTags.data : {};
+			if (!(XML_ROLE_ID in tagsMap)) {
+				modelTagsHandle.override(pi.pi.settings, {
+					...tagsMap,
+					[XML_ROLE_ID]: { name: "XML Prompt", color: "accent" },
+				});
+			}
 		}
-	}
+	});
 
 	async function runHeadlessXmlTurn(rawTask: string, ctx: ExtensionCommandContext): Promise<void> {
 		const target = resolveXmlModel(pi, ctx);
