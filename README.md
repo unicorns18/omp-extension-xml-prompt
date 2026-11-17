@@ -38,6 +38,16 @@ When decisions materially affect the work, the model can ask up to four clarifyi
 
 After drafting, use **Refine** to request changes or **Answer N questions** to resolve remaining open questions. Refinements retain the same conversation. The latest XML can be copied, placed in the main editor, or sent to the main agent.
 
+### Reading files
+
+Mention a file with omp's `@path` syntax to send its contents with the task:
+
+```text
+/xml read in @docs/java-vulkan-migration-audit.md, prepare a prompt for implementing each phase with TODOs for each
+```
+
+Each mentioned file up to 256 KB is read whole, so the model can build milestones from a long plan; the panel lists the files it read under the task. Mentions in refinement messages are read too; answers in the question dialog are not scanned. A directory, a binary file or a larger file is sent as its path with a note, and the model tells the agent to read it. As in omp, `@"a path with spaces"` quotes a path, and a mention that names no existing file stays plain text.
+
 ### Controls
 
 | Tern button | Keyboard | Action |
@@ -63,7 +73,7 @@ Print mode writes a prompt wrapped in `<current_task>...</current_task>` and nev
 
 ## Context and privacy
 
-The XML model receives your task, refinement messages, and up to four recent user/assistant messages from the current session, each truncated to 500 characters. These snippets help resolve references such as “the file we just changed”; the extension does not read repository files itself.
+The XML model receives your task, refinement messages, the files you mention with `@path`, and up to four recent user/assistant messages from the current session, each truncated to 500 characters. These snippets help resolve references such as “the file we just changed”; the extension reads no repository file you did not mention.
 
 Drafting stays separate from the main agent conversation. Nothing is sent to the main agent unless you choose **Send to agent**. Closing the panel discards its in-memory drafting conversation.
 
@@ -82,5 +92,7 @@ Start a new omp session after changing the extension. Do not install and link tw
 The initial implementation was checked with TypeScript and ESLint, live model calls, a text-mode omp session, and an isolated Tern session at a 390 × 844 viewport. The Tern checks covered clarification choices, submission, refinement, remaining-question cancellation, and pasting into the editor.
 
 The published Git URL was installed in a fresh omp profile: `omp plugin doctor` reported four healthy checks with no warnings or errors, and `/xml` registered successfully. Model-role settings are initialized at session startup so the extension also passes install-time validation.
+
+File reading was checked on omp 18.22.0 with an 80.9 KB audit whose migration plan starts past the first 50 KB, where omp's own `@` auto-read cuts files off. In print mode the drafted prompt covered all nine phases of that plan. In an isolated Tern 0.9.26 session at 390 × 844, the panel listed the file under the task.
 
 Physical phone keyboard behavior and remote clipboard delivery were not tested.
